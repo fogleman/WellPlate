@@ -1,8 +1,13 @@
 wxPython Well Plate Dialog
+--------------------------
 
 This module provides a simple dialog that allows the user to configure a
-well plate by specifying a "type" for each well, such as: Empty, Blank,
-Calibrant, Sample.
+well plate by specifying a "type" for each well. The default types are:
+
+- Empty
+- Blank,
+- Calibrant
+- Sample
 
 The user selection can be returned in a variety of ways, including well names
 or row- or column-major indexes for each type.
@@ -13,10 +18,6 @@ The dialog is reasonably configurable:
 - Selectable types: labels and colors
 - Font sizes for row and column header labels
 - Whether or not to show labels and well labels
-
-Screenshot:
-
-![](https://raw.github.com/fogleman/WellPlate/master/screenshot.png)
 
 Sample code:
 
@@ -29,3 +30,7 @@ Sample code:
                 if key == plate.SAMPLE:
                     # do something
     dialog.Destroy()
+
+Screenshot:
+
+![](https://raw.github.com/fogleman/WellPlate/master/screenshot.png)
