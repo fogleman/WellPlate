@@ -27,19 +27,15 @@ class PlateModel(object):
             CALIBRANT: (51, 204, 51),
             SAMPLE: (204, 51, 51),
         }
-        self.active_key = 3
+        self.active_key = SAMPLE
         self.grid = [[EMPTY] * self.cols for _ in range(self.rows)]
     def select(self, row, col):
         self.grid[row][col] = self.active_key
     def toggle(self, row, col):
-        if self.grid[row][col]:
+        if self.grid[row][col] == self.active_key:
             self.grid[row][col] = EMPTY
         else:
             self.grid[row][col] = self.active_key
-    def toggle_all(self):
-        for row in range(self.rows):
-            for col in range(self.cols):
-                self.toggle(row, col)
     def select_all(self):
         self.grid = [[self.active_key] * self.cols for _ in range(self.rows)]
     def select_none(self):
