@@ -14,6 +14,10 @@ The dialog is reasonably configurable:
 - Font sizes for row and column header labels
 - Whether or not to show labels and well labels
 
+Screenshot:
+
+![](https://raw.github.com/fogleman/WellPlate/master/screenshot.png)
+
 Sample code:
 
     model = plate.PlateModel(8, 12)
