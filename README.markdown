@@ -1,5 +1,7 @@
-wxPython Well Plate Dialog
---------------------------
+Python + wxPython Well Plate Dialog
+-----------------------------------
+
+### Summary
 
 This module provides a simple dialog that allows the user to configure a
 well plate by specifying a "type" for each well. The default types are:
@@ -19,7 +21,7 @@ The dialog is reasonably configurable:
 - Font sizes for row and column header labels
 - Whether or not to show labels and well labels
 
-Sample code:
+### Sample code
 
     model = plate.PlateModel(8, 12)
     dialog = plate.PlateDialog(model)
@@ -31,6 +33,6 @@ Sample code:
                     # do something
     dialog.Destroy()
 
-Screenshot:
+### Screenshot
 
 ![](https://raw.github.com/fogleman/WellPlate/master/screenshot.png)
