@@ -14,7 +14,7 @@ class PlateModel(object):
         self.show_labels = True
         self.label_size = 12
         self.show_well_labels = True
-        self.well_label_size = 8
+        self.well_label_size = 9
         self.labels = {
             EMPTY: 'Empty',
             BLANK: 'Blank',
@@ -191,7 +191,10 @@ class PlatePanel(wx.Panel):
                 dc.SetBrush(wx.Brush(wx.Colour(*model.colors[key])))
                 dc.DrawCircle(x, y, size / 2 - size / 12)
                 if model.show_well_labels:
-                    label = '%s%d' % (chr(ord('A') + row), col + 1)
+                    if key == EMPTY:
+                        label = '%s%d' % (chr(ord('A') + row), col + 1)
+                    else:
+                        label = model.labels[key][0]
                     tw, th = dc.GetTextExtent(label)
                     dc.DrawText(label, x - tw / 2, y - th / 2)
         if model.show_labels:
