@@ -84,6 +84,7 @@ class PlatePanel(wx.Panel):
         self.Bind(wx.EVT_LEFT_UP, self.on_left_up)
         self.Bind(wx.EVT_MOTION, self.on_motion)
         self.Bind(wx.EVT_MOUSE_CAPTURE_LOST, self.on_mouse_capture_lost)
+        self.SetMinSize((model.cols * 24, model.rows * 24))
     def on_size(self, event):
         event.Skip()
         self.Refresh()
@@ -219,7 +220,7 @@ class PlateDialog(wx.Dialog):
         self.model = model
         self.SetTitle('Select Wells')
         sizer = self.create_controls(self)
-        self.SetSizer(sizer)
+        self.SetSizerAndFit(sizer)
         self.SetSize((640, 540))
     def create_controls(self, parent):
         padding = 12
