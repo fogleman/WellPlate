@@ -5,7 +5,7 @@ This module provides a simple dialog that allows the user to configure a
 well plate by specifying a "type" for each well. The default types are:
 
 - Empty
-- Blank,
+- Blank
 - Calibrant
 - Sample
 
