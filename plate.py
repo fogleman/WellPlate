@@ -9,12 +9,9 @@ class PlateModel(object):
     def __init__(self, rows, cols):
         self.rows = rows
         self.cols = cols
-        self.margin = 50
         self.padding = 10
         self.show_labels = True
-        self.label_size = 12
         self.show_well_labels = True
-        self.well_label_size = 9
         self.labels = {
             EMPTY: 'Empty',
             BLANK: 'Blank',
@@ -159,9 +156,9 @@ class PlatePanel(wx.Panel):
         dc.DrawRectangle(x1, y1, x2 - x1, y2 - y1)
     def draw_plate(self, dc):
         model = self.model
-        margin = model.margin
-        padding = model.padding
         w, h = self.GetClientSize()
+        padding = min(w, h) / 36
+        margin = min(w, h) / 10
         pw, ph = w - margin * 2 - padding * 2, h - margin * 2 - padding * 2
         self.size = size = min(pw / model.cols, ph / model.rows)
         dw, dh = size * model.cols, size * model.rows
@@ -171,7 +168,7 @@ class PlatePanel(wx.Panel):
         dc.DrawRectangle(dx - padding, dy - padding, 
             dw + padding * 2, dh + padding * 2)
         font = dc.GetFont()
-        font.SetPointSize(model.well_label_size)
+        font.SetPointSize(size / 4)
         dc.SetFont(font)
         box = set(self.box_test(*self.box)) if self.box else set()
         dc.SetPen(wx.Pen(wx.BLACK, 2))
@@ -187,7 +184,7 @@ class PlatePanel(wx.Panel):
                 if key:
                     dc.SetTextForeground(wx.Colour(0, 0, 0))
                 else:
-                    dc.SetTextForeground(wx.Colour(128, 128, 128))
+                    dc.SetTextForeground(wx.Colour(64, 64, 64))
                 dc.SetBrush(wx.Brush(wx.Colour(*model.colors[key])))
                 dc.DrawCircle(x, y, size / 2 - size / 12)
                 if model.show_well_labels:
@@ -199,18 +196,18 @@ class PlatePanel(wx.Panel):
                     dc.DrawText(label, x - tw / 2, y - th / 2)
         if model.show_labels:
             font = dc.GetFont()
-            font.SetPointSize(model.label_size)
+            font.SetPointSize(size / 2)
             dc.SetFont(font)
             dc.SetTextForeground(wx.BLACK)
             for row in range(model.rows):
                 y = dy + row * size + size / 2
-                x = dx - padding * 3
+                x = dx - padding * 2 - size / 4
                 label = chr(ord('A') + row)
                 tw, th = dc.GetTextExtent(label)
                 dc.DrawText(label, x - tw / 2, y - th / 2)
             for col in range(model.cols):
                 x = dx + col * size + size / 2
-                y = dy - padding * 3
+                y = dy - padding * 2 - size / 4
                 label = str(col + 1)
                 tw, th = dc.GetTextExtent(label)
                 dc.DrawText(label, x - tw / 2, y - th / 2)
