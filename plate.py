@@ -170,7 +170,7 @@ class PlatePanel(wx.Panel):
         dc.DrawRectangle(dx - padding, dy - padding, 
             dw + padding * 2, dh + padding * 2)
         font = dc.GetFont()
-        font.SetPointSize(size / 4)
+        font.SetPointSize(size / 5)
         dc.SetFont(font)
         box = set(self.box_test(*self.box)) if self.box else set()
         dc.SetPen(wx.Pen(wx.BLACK, 2))
@@ -198,7 +198,7 @@ class PlatePanel(wx.Panel):
                     dc.DrawText(label, x - tw / 2, y - th / 2)
         if model.show_labels:
             font = dc.GetFont()
-            font.SetPointSize(size / 2)
+            font.SetPointSize(size / 3)
             dc.SetFont(font)
             dc.SetTextForeground(wx.BLACK)
             for row in range(model.rows):
@@ -221,7 +221,7 @@ class PlatePanel(wx.Panel):
             w = w / len(model.labels)
             dc.SetPen(wx.Pen(wx.BLACK, 2))
             font = dc.GetFont()
-            font.SetPointSize(h * 3 / 7)
+            font.SetPointSize(h / 3)
             dc.SetFont(font)
             for key in sorted(model.labels):
                 label = model.labels[key]
