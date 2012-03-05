@@ -12,7 +12,7 @@ class PlateModel(object):
         self.padding = 10
         self.show_labels = True
         self.show_well_labels = True
-        self.show_legend = True
+        self.show_legend = False
         self.labels = {
             EMPTY: 'Empty',
             BLANK: 'Blank',
