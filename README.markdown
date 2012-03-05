@@ -33,8 +33,10 @@ The dialog is reasonably configurable:
                     # do something
     dialog.Destroy()
 
-### Screenshots
+### Mac Screenshot
 
 ![](https://raw.github.com/fogleman/WellPlate/master/screenshot-mac.png)
+
+### Windows Screenshot
 
 ![](https://raw.github.com/fogleman/WellPlate/master/screenshot-windows.png)
