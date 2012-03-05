@@ -12,6 +12,7 @@ class PlateModel(object):
         self.padding = 10
         self.show_labels = True
         self.show_well_labels = True
+        self.show_legend = True
         self.labels = {
             EMPTY: 'Empty',
             BLANK: 'Blank',
@@ -20,7 +21,7 @@ class PlateModel(object):
         }
         self.colors = {
             EMPTY: (255, 255, 255),
-            BLANK: (51, 51, 204),
+            BLANK: (102, 102, 255),
             CALIBRANT: (51, 204, 51),
             SAMPLE: (204, 51, 51),
         }
@@ -159,7 +160,7 @@ class PlatePanel(wx.Panel):
         model = self.model
         w, h = self.GetClientSize()
         padding = min(w, h) / 36
-        margin = min(w, h) / 10
+        margin = min(w, h) / 8
         pw, ph = w - margin * 2 - padding * 2, h - margin * 2 - padding * 2
         self.size = size = min(pw / model.cols, ph / model.rows)
         dw, dh = size * model.cols, size * model.rows
@@ -212,6 +213,24 @@ class PlatePanel(wx.Panel):
                 label = str(col + 1)
                 tw, th = dc.GetTextExtent(label)
                 dc.DrawText(label, x - tw / 2, y - th / 2)
+        if model.show_legend:
+            x = dx - padding
+            y = dy + dh + padding * 2
+            w = dw + padding * 2
+            h = margin - padding * 2
+            w = w / len(model.labels)
+            dc.SetPen(wx.Pen(wx.BLACK, 2))
+            font = dc.GetFont()
+            font.SetPointSize(h * 3 / 7)
+            dc.SetFont(font)
+            for key in sorted(model.labels):
+                label = model.labels[key]
+                dc.SetBrush(wx.Brush(wx.Colour(*model.colors[key])))
+                dc.DrawRoundedRectangle(x + padding / 2, y, 
+                    w - padding, h, padding / 2)
+                tw, th = dc.GetTextExtent(label)
+                dc.DrawText(label, x + w / 2 - tw / 2, y + h / 2 - th / 2)
+                x += w + 1
 
 class PlateDialog(wx.Dialog):
     def __init__(self, model, parent=None):
@@ -221,7 +240,6 @@ class PlateDialog(wx.Dialog):
         self.SetTitle('Select Wells')
         sizer = self.create_controls(self)
         self.SetSizerAndFit(sizer)
-        self.SetSize((640, 540))
     def create_controls(self, parent):
         padding = 12
         panel = PlatePanel(self.model, parent, style=wx.BORDER_SUNKEN)
@@ -279,6 +297,7 @@ def main():
     #model = PlateModel(16, 24) # 384
     #model.show_well_labels = False
     dialog = PlateDialog(model)
+    dialog.SetSize((800, 700))
     dialog.Center()
     if dialog.ShowModal() == wx.ID_OK:
         for key, label in model.labels.iteritems():
