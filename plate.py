@@ -1,9 +1,17 @@
+import functools
 import wx
 
 EMPTY = 0
 BLANK = 1
 CALIBRANT = 2
 SAMPLE = 3
+
+def menu_item(window, menu, label, func):
+    item = wx.MenuItem(menu, -1, label)
+    if func is not None:
+        window.Bind(wx.EVT_MENU, func, id=item.GetId())
+    menu.AppendItem(item)
+    return item
 
 class PlateModel(object):
     def __init__(self, rows, cols):
@@ -25,6 +33,7 @@ class PlateModel(object):
             CALIBRANT: (51, 204, 51),
             SAMPLE: (204, 51, 51),
         }
+        self.menu_items = []
         self.active_key = SAMPLE
         self.grid = [[EMPTY] * self.cols for _ in range(self.rows)]
     def select(self, row, col):
@@ -85,6 +94,7 @@ class PlatePanel(wx.Panel):
         self.Bind(wx.EVT_LEFT_UP, self.on_left_up)
         self.Bind(wx.EVT_MOTION, self.on_motion)
         self.Bind(wx.EVT_MOUSE_CAPTURE_LOST, self.on_mouse_capture_lost)
+        self.Bind(wx.EVT_RIGHT_UP, self.on_right_up)
         self.SetMinSize((model.cols * 24, model.rows * 24))
     def on_size(self, event):
         event.Skip()
@@ -105,6 +115,26 @@ class PlatePanel(wx.Panel):
             if x > x1 and x < x2 and y > y1 and y < y2:
                 result.append((row, col))
         return result
+    def build_menu(self, row, col):
+        def handler(func, row, col, event):
+            func(row, col)
+        menu_items = self.model.menu_items
+        if menu_items:
+            menu = wx.Menu()
+            for label, func in menu_items:
+                func = functools.partial(handler, func, row, col)
+                menu_item(self, menu, label, func)
+            return menu
+        else:
+            return None
+    def on_right_up(self, event):
+        x, y = event.GetPosition()
+        coord = self.hit_test(x, y)
+        if coord is not None:
+            row, col = coord
+            menu = self.build_menu(row, col)
+            if menu is not None:
+                self.PopupMenu(menu)
     def on_mouse_capture_lost(self, event):
         self.box = None
         self.Refresh()
@@ -292,10 +322,16 @@ class PlateDialog(wx.Dialog):
         self.Refresh()
 
 def main():
+    def on_move_to(row, col):
+        print 'on_move_to', row, col
+    def on_move_to_and_scan(row, col):
+        print 'on_move_to_and_scan', row, col
     app = wx.PySimpleApp()
-    model = PlateModel(8, 12) # 96
-    #model = PlateModel(16, 24) # 384
-    #model.show_well_labels = False
+    model = PlateModel(8, 12)
+    model.menu_items = [
+        ('Move To', on_move_to),
+        ('Move To && Scan', on_move_to_and_scan),
+    ]
     dialog = PlateDialog(model)
     dialog.SetSize((800, 700))
     dialog.Center()
